@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.urls import reverse
 from permissions import IsOwnerOrReadOnly
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -13,12 +14,25 @@ from rest_framework import mixins
 from rest_framework import generics
 from django.contrib.auth.models import User
 from rest_framework import permissions
+from rest_framework import renderers
+
 
 
 
 
 
 # Create your views here.
+
+@api_view(['GET'])
+def api_root(request, format=True):
+    return Response({
+        'users': reverse('user-list' ),
+        'snippets': reverse('snippet-list')
+    })
+
+
+
+
 # @api_view(['GET', 'POST'])
 # def snippet_list(request, format=None):
 #
@@ -150,3 +164,13 @@ class UserList(generics.ListAPIView):
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+
+class SnippetHighlight(generics.GenericAPIView):
+    queryset = Snippet.objects.all()
+    renderer_classes = (renderers.StaticHTMLRenderer,)
+
+    def get(self,request, *args, **kwargs):
+        snippet = self.get_object()
+        return Response(snippet.highlighted)
