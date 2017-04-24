@@ -3,6 +3,7 @@ from models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES
 from django.contrib.auth.models import User
 
 class SnippetSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
     # id = serializers.IntegerField(read_only=True)
     # title = serializers.CharField(required=False, allow_blank=True, max_length=100)
     # code = serializers.CharField(style={'base_template': 'textarea.html'})
@@ -11,7 +12,7 @@ class SnippetSerializer(serializers.ModelSerializer):
     # style = serializers.ChoiceField(choices=STYLE_CHOICES, default='friendly')
     class Meta:
         model = Snippet
-        fields= ('id', 'title', 'code', 'linenos', 'language', 'style')
+        fields= ('id', 'title', 'code', 'linenos', 'language', 'style', 'owner')
 
     # def create(self, validated_data):
     #     return  Snippet.objects.create(**validated_data)
