@@ -6,8 +6,8 @@ from permissions import IsOwnerOrReadOnly
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from models import Snippet
-from serializers import SnippetSerializer, UserSerializer
+from models import Snippet, Status
+from serializers import SnippetSerializer, UserSerializer, StatusSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework import mixins
@@ -17,6 +17,7 @@ from rest_framework import permissions
 from rest_framework import renderers
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
+
 
 
 
@@ -198,3 +199,24 @@ class SnippetViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+
+
+
+# class StatusList(generics.ListCreateAPIView):
+#     queryset = Status.objects.all()
+#     serializer_class = StatusSerializer
+#
+#
+# class StatusDetail(generics.RetrieveDestroyAPIView):
+#     queryset = Status.objects.all()
+#     serializer_class = StatusSerializer
+
+
+class StatusViewSet(viewsets.ModelViewSet):
+    queryset = Status.objects.all()
+    serializer_class = StatusSerializer
+
+
+
+

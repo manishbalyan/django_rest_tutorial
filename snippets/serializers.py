@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES
+from models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES, Status
 from django.contrib.auth.models import User
 
 class SnippetSerializer(serializers.HyperlinkedModelSerializer):
@@ -32,8 +32,14 @@ class SnippetSerializer(serializers.HyperlinkedModelSerializer):
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     snippets = serializers.HyperlinkedRelatedField(many=True, view_name='snippet-detail', read_only=True)
 
-
     class Meta:
         model = User
         fields = ('id', 'username', 'snippets','url')
+
+
+
+class StatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Status
+        fields = ('id', 'text', 'user')
 

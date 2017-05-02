@@ -10,6 +10,9 @@ from pygments.styles import get_all_styles
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters.html import HtmlFormatter
 from pygments import highlight
+from django.conf import settings
+from django.db import models
+from django.template.defaultfilters import truncatechars
 
 LEXERS = [item for item in get_all_lexers() if item[1]]
 LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
@@ -38,3 +41,16 @@ class Snippet(models.Model):
 
     class Meta:
         ordering = ('created',)
+
+
+
+class Status(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    text = models.CharField(max_length=255)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = 'statuses'
+
+    def __unicode__(self):
+        return truncatechars(self.text, 20)
